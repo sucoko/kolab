@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>KOLAB - Ketua Konsentrasi</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="container">
+<h1>Input Tema Projek</h1>
+
+<label>Konsentrasi Keahlian</label>
+<select id="kompetensi"></select>
+
+<label>Tema Projek</label>
+<input id="tema" type="text">
+
+<label>Deskripsi</label>
+<textarea id="deskripsi"></textarea>
+
+<label>Durasi (Minggu)</label>
+<input id="durasi" type="number">
+
+<button onclick="simpanTema()">Simpan</button>
+
+<p id="status"></p>
+</div>
+
+<script src="js/api.js"></script>
+</body>
+</html>
