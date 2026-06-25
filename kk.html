@@ -7,23 +7,27 @@
 </head>
 <body>
 <div class="container">
-<h1>Input Tema Projek</h1>
+
+<h1>📚 Input Tema Projek</h1>
 
 <label>Konsentrasi Keahlian</label>
 <select id="kompetensi"></select>
 
 <label>Tema Projek</label>
-<input id="tema" type="text">
+<input type="text" id="tema">
 
 <label>Deskripsi</label>
 <textarea id="deskripsi"></textarea>
 
 <label>Durasi (Minggu)</label>
-<input id="durasi" type="number" min="1" value="1">
+<input type="number" id="durasi" min="1">
 
-<button onclick="simpanTema()">Simpan</button>
+<button onclick="simpanTema()">
+  💾 Simpan Tema
+</button>
 
-<p id="status"></p>
+<div id="status"></div>
+
 </div>
 
 <script src="js/api.js"></script>
