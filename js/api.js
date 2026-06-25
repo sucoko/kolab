@@ -41,33 +41,44 @@ async function loadCompetencies(){
 
 async function simpanTema(){
 
- const durasi = parseInt(
-   document.getElementById('durasi').value
- );
+ try{
 
- if(durasi < 1){
-   alert('Durasi minimal 1 minggu');
-   return;
+   const durasi = parseInt(
+     document.getElementById('durasi').value
+   );
+
+   if(durasi < 1){
+     alert('Durasi minimal 1 minggu');
+     return;
+   }
+
+   const url =
+     API_URL +
+     '?action=saveTheme' +
+     '&competencyId=' + encodeURIComponent(document.getElementById('kompetensi').value) +
+     '&tema=' + encodeURIComponent(document.getElementById('tema').value) +
+     '&deskripsi=' + encodeURIComponent(document.getElementById('deskripsi').value) +
+     '&durasi=' + encodeURIComponent(durasi);
+
+   console.log("URL:", url);
+
+   const res = await fetch(url);
+
+   console.log("Status:", res.status);
+
+   const hasil = await res.json();
+
+   console.log("Hasil:", hasil);
+
+   document.getElementById('status').innerText =
+     hasil.message;
+
+ }catch(err){
+
+   console.error("ERROR SIMPAN:", err);
+
  }
 
- const url =
-   API_URL +
-   '?action=saveTheme' +
-   '&competencyId=' + encodeURIComponent(document.getElementById('kompetensi').value) +
-   '&tema=' + encodeURIComponent(document.getElementById('tema').value) +
-   '&deskripsi=' + encodeURIComponent(document.getElementById('deskripsi').value) +
-   '&durasi=' + encodeURIComponent(durasi);
-
- console.log("URL:", url);
-
- const res = await fetch(url);
-
- const hasil = await res.json();
-
- console.log("HASIL:", hasil);
- 
- document.getElementById('status').innerText =
-   hasil.message;
 }
 
 
