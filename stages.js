@@ -29,25 +29,57 @@ async function loadStages(){
   const data =
     await apiGet("getStages");
 
-  const tbody =
-    document.getElementById("stageTable");
+  const container =
+    document.getElementById(
+      "stageContainer"
+    );
 
-  tbody.innerHTML = "";
+  container.innerHTML = "";
 
-  data.forEach(stage => {
+  data.sort(
+    (a,b)=>
+    Number(a.Urutan) -
+    Number(b.Urutan)
+  );
 
-    tbody.innerHTML += `
-  <tr>
-    <td>${stage.Urutan}</td>
-    <td>${stage.NamaTahap}</td>
-    <td>${stage.MingguMulai} - ${stage.MingguSelesai}</td>
-    <td>
-      <button onclick="hapusTahap('${stage.StageID}')">
-        Hapus
-      </button>
-    </td>
-  </tr>
-`;
+  data.forEach(stage=>{
+
+    container.innerHTML += `
+      <div class="stage-card">
+
+        <div class="stage-header">
+
+          <div class="stage-title">
+            ${stage.Urutan}. ${stage.NamaTahap}
+          </div>
+
+        </div>
+
+        <div class="stage-week">
+          📅 Minggu
+          ${stage.MingguMulai}
+          -
+          ${stage.MingguSelesai}
+        </div>
+
+        <div class="stage-desc">
+          ${stage.DeskripsiTahap}
+        </div>
+
+        <div class="stage-action">
+
+          <button
+            class="btn-delete"
+            onclick="hapusTahap('${stage.StageID}')">
+
+            Hapus
+
+          </button>
+
+        </div>
+
+      </div>
+    `;
 
   });
 
