@@ -70,37 +70,5 @@ async function simpanTema(){
    hasil.message;
 }
 
- const payload={
-  action:'saveTheme',
-  competencyId:document.getElementById('kompetensi').value,
-  tema:document.getElementById('tema').value,
-  deskripsi:document.getElementById('deskripsi').value,
-  durasi:durasi
- };
-
-console.log("Payload:", payload);
-
-try{
-
- const res=await fetch(API_URL,{
-   method:'POST',
-   headers:{'Content-Type':'application/json'},
-   body:JSON.stringify(payload)
- });
-
- console.log("Status:", res.status);
-
- const text = await res.text();
-
- console.log("Response:", text);
-
- document.getElementById('status').innerText = text;
-
-}catch(err){
-
- console.error("ERROR:", err);
-
-}
-}
 
 loadCompetencies();
