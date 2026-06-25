@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>KOLAB - Tahapan Projek</title>
+
+<style>
+
+body{
+  font-family: Arial, sans-serif;
+  margin:20px;
+}
+
+.card{
+  border:1px solid #ddd;
+  padding:20px;
+  border-radius:10px;
+  max-width:700px;
+}
+
+input,select,textarea{
+  width:100%;
+  padding:8px;
+  margin-top:5px;
+  margin-bottom:10px;
+}
+
+button{
+  padding:10px 20px;
+  cursor:pointer;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:20px;
+}
+
+th,td{
+  border:1px solid #ddd;
+  padding:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+<h2>Tahapan Projek</h2>
+
+<label>Tema Projek</label>
+<select id="theme">
+<option value="">Memuat...</option>
+</select>
+
+<label>Urutan</label>
+<input type="number" id="urutan">
+
+<label>Nama Tahap</label>
+<input type="text" id="namaTahap">
+
+<label>Deskripsi Tahap</label>
+<textarea id="deskripsiTahap"></textarea>
+
+<label>Minggu Mulai</label>
+<input type="number" id="mingguMulai">
+
+<label>Minggu Selesai</label>
+<input type="number" id="mingguSelesai">
+
+<button onclick="simpanTahap()">
+Simpan Tahapan
+</button>
+
+</div>
+
+<h3>Daftar Tahapan</h3>
+
+<table>
+
+<thead>
+<tr>
+<th>Urut</th>
+<th>Tahap</th>
+<th>Minggu</th>
+</tr>
+</thead>
+
+<tbody id="stageTable">
+</tbody>
+
+</table>
+
+<script src="api.js"></script>
+<script src="stages.js"></script>
+
+</body>
+</html>
