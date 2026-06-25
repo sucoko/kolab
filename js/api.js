@@ -62,16 +62,29 @@ async function simpanTema(){
   durasi:durasi
  };
 
+console.log("Payload:", payload);
+
+try{
+
  const res=await fetch(API_URL,{
    method:'POST',
    headers:{'Content-Type':'application/json'},
    body:JSON.stringify(payload)
  });
 
- const hasil=await res.json();
+ console.log("Status:", res.status);
 
- document.getElementById('status').innerText =
-   hasil.message;
+ const text = await res.text();
+
+ console.log("Response:", text);
+
+ document.getElementById('status').innerText = text;
+
+}catch(err){
+
+ console.error("ERROR:", err);
+
+}
 }
 
 loadCompetencies();
