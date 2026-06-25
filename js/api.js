@@ -43,6 +43,8 @@ async function loadCompetencies(){
 
 async function simpanTema(){
 
+ alert("Simpan diklik");
+ 
  const durasi = parseInt(
    document.getElementById('durasi').value
  );
