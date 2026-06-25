@@ -4,8 +4,8 @@ async function loadCompetencies(){
 
  try{
 
-   const res = await fetch(url);
-
+   const res = await fetch(API_URL + '?action=getCompetencies');
+   
    console.log("Status:", res.status);
 
    const data = await res.json();
