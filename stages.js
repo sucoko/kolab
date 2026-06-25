@@ -118,3 +118,104 @@ async function hapusTahap(stageId){
   loadStages();
 
 }
+async function generateTahapanAI(){
+
+  const themeId =
+    document.getElementById("theme").value;
+
+  if(!themeId){
+    alert("Pilih tema terlebih dahulu");
+    return;
+  }
+
+  const themes =
+    await apiGet("getThemes");
+
+  const theme =
+    themes.find(
+      t => t.ThemeID === themeId
+    );
+
+  if(!theme){
+    alert("Tema tidak ditemukan");
+    return;
+  }
+
+  const durasi =
+    parseInt(theme.DurasiMinggu);
+
+  let tahapan = [];
+
+  if(durasi <= 8){
+
+    tahapan = [
+      "Analisis Kebutuhan",
+      "Perencanaan Projek",
+      "Pelaksanaan Projek",
+      "Presentasi Hasil"
+    ];
+
+  }else if(durasi <= 16){
+
+    tahapan = [
+      "Analisis Kebutuhan",
+      "Perencanaan Projek",
+      "Persiapan Alat dan Bahan",
+      "Pelaksanaan Projek",
+      "Evaluasi",
+      "Presentasi Hasil"
+    ];
+
+  }else{
+
+    tahapan = [
+      "Analisis Kebutuhan",
+      "Perencanaan Projek",
+      "Desain Solusi",
+      "Persiapan",
+      "Pelaksanaan Tahap 1",
+      "Pelaksanaan Tahap 2",
+      "Evaluasi",
+      "Presentasi Hasil"
+    ];
+
+  }
+
+  const blok =
+    Math.floor(durasi / tahapan.length);
+
+  let html =
+    `<h4>Usulan Tahapan AI</h4><ol>`;
+
+  let mingguAwal = 1;
+
+  tahapan.forEach((nama,index)=>{
+
+    let mingguAkhir;
+
+    if(index === tahapan.length - 1){
+      mingguAkhir = durasi;
+    }else{
+      mingguAkhir =
+        mingguAwal + blok - 1;
+    }
+
+    html += `
+      <li>
+        ${nama}
+        (Minggu ${mingguAwal}-${mingguAkhir})
+      </li>
+    `;
+
+    mingguAwal =
+      mingguAkhir + 1;
+
+  });
+
+  html += "</ol>";
+
+  document.getElementById(
+    "aiResult"
+  ).innerHTML = html;
+
+}
