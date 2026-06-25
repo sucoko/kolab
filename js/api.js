@@ -43,8 +43,6 @@ async function loadCompetencies(){
 
 async function simpanTema(){
 
- alert("Simpan diklik");
- 
  const durasi = parseInt(
    document.getElementById('durasi').value
  );
@@ -53,6 +51,24 @@ async function simpanTema(){
    alert('Durasi minimal 1 minggu');
    return;
  }
+
+ const url =
+   API_URL +
+   '?action=saveTheme' +
+   '&competencyId=' + encodeURIComponent(document.getElementById('kompetensi').value) +
+   '&tema=' + encodeURIComponent(document.getElementById('tema').value) +
+   '&deskripsi=' + encodeURIComponent(document.getElementById('deskripsi').value) +
+   '&durasi=' + encodeURIComponent(durasi);
+
+ console.log("URL:", url);
+
+ const res = await fetch(url);
+
+ const hasil = await res.json();
+
+ document.getElementById('status').innerText =
+   hasil.message;
+}
 
  const payload={
   action:'saveTheme',
