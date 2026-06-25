@@ -64,6 +64,8 @@ async function simpanTema(){
 
  const hasil = await res.json();
 
+ console.log("HASIL:", hasil);
+ 
  document.getElementById('status').innerText =
    hasil.message;
 }
