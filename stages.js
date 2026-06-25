@@ -1,4 +1,5 @@
 loadThemes();
+loadStages();
 
 async function loadThemes(){
 
@@ -17,6 +18,30 @@ async function loadThemes(){
       <option value="${theme.ThemeID}">
         ${theme.Tema}
       </option>
+    `;
+
+  });
+
+}
+
+async function loadStages(){
+
+  const data =
+    await apiGet("getStages");
+
+  const tbody =
+    document.getElementById("stageTable");
+
+  tbody.innerHTML = "";
+
+  data.forEach(stage => {
+
+    tbody.innerHTML += `
+      <tr>
+        <td>${stage.Urutan}</td>
+        <td>${stage.NamaTahap}</td>
+        <td>${stage.MingguMulai} - ${stage.MingguSelesai}</td>
+      </tr>
     `;
 
   });
@@ -61,5 +86,6 @@ async function simpanTahap(){
 
   alert(json.message);
 
-}
+  loadStages();
 
+}
