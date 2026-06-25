@@ -5,7 +5,51 @@
 <title>KOLAB STAGES TEST 999</title>
 
 <style>
+.stage-card{
+  background:#fff;
+  border-left:6px solid #4f46e5;
+  border-radius:12px;
+  padding:15px;
+  margin-bottom:15px;
+  box-shadow:0 2px 8px rgba(0,0,0,0.08);
+}
 
+.stage-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stage-title{
+  font-size:18px;
+  font-weight:bold;
+}
+
+.stage-week{
+  color:#666;
+  margin-top:8px;
+}
+
+.stage-desc{
+  margin-top:10px;
+  color:#444;
+}
+
+.stage-action{
+  margin-top:12px;
+}
+
+.btn-delete{
+  background:#ef4444;
+  color:white;
+  border:none;
+  padding:8px 12px;
+  border-radius:6px;
+}
+
+.btn-delete:hover{
+  opacity:0.8;
+}
 body{
   font-family: Arial, sans-serif;
   margin:20px;
@@ -91,23 +135,11 @@ Simpan Tahapan
 
 </div>
 
-<h3>Daftar Tahapan</h3>
+<h3>Timeline Projek</h3>
 
-<table>
+<div id="stageContainer">
 
-<thead>
-<tr>
-<th>Urut</th>
-<th>Tahap</th>
-<th>Minggu</th>
-<th>Aksi</th>
-</tr>
-</thead>
-
-<tbody id="stageTable">
-</tbody>
-
-</table>
+</div>
 
 <script src="api.js"></script>
 <script src="stages.js"></script>
