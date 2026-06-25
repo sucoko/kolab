@@ -1,6 +1,12 @@
 loadThemes();
 loadStages();
 
+async function generateTahapanAI(){
+
+  console.log("Generate AI diklik");
+
+  const themeId =
+    document.getElementById("theme").value;
 async function loadThemes(){
 
   const data =
@@ -175,8 +181,6 @@ async function generateTahapanAI(){
 
   const durasi =
     parseInt(theme.DurasiMinggu);
-
-  let tahapan = [];
 
   const tahapan = [
 
