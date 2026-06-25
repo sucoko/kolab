@@ -37,12 +37,17 @@ async function loadStages(){
   data.forEach(stage => {
 
     tbody.innerHTML += `
-      <tr>
-        <td>${stage.Urutan}</td>
-        <td>${stage.NamaTahap}</td>
-        <td>${stage.MingguMulai} - ${stage.MingguSelesai}</td>
-      </tr>
-    `;
+  <tr>
+    <td>${stage.Urutan}</td>
+    <td>${stage.NamaTahap}</td>
+    <td>${stage.MingguMulai} - ${stage.MingguSelesai}</td>
+    <td>
+      <button onclick="hapusTahap('${stage.StageID}')">
+        Hapus
+      </button>
+    </td>
+  </tr>
+`;
 
   });
 
