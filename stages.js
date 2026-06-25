@@ -94,3 +94,27 @@ async function simpanTahap(){
   loadStages();
 
 }
+async function hapusTahap(stageId){
+
+  const konfirmasi =
+    confirm("Yakin hapus tahapan ini?");
+
+  if(!konfirmasi){
+    return;
+  }
+
+  const result =
+    await fetch(
+      API_URL +
+      "?action=deleteStage" +
+      "&stageId=" + stageId
+    );
+
+  const json =
+    await result.json();
+
+  alert(json.message);
+
+  loadStages();
+
+}
