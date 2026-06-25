@@ -4,9 +4,11 @@ async function loadCompetencies(){
 
  try{
 
-   console.log("Mulai load");
+   console.log("URL:", url);
 
-   const res = await fetch(API_URL+'?action=getCompetencies');
+   alert(url);
+
+   const res = await fetch(url);
 
    console.log("Status:", res.status);
 
