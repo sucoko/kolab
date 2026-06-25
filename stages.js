@@ -178,41 +178,25 @@ async function generateTahapanAI(){
 
   let tahapan = [];
 
-  if(durasi <= 8){
+  const tahapan = [
 
-    tahapan = [
-      "Analisis Kebutuhan",
-      "Perencanaan Projek",
-      "Pelaksanaan Projek",
-      "Presentasi Hasil"
-    ];
+  "Identifikasi Masalah dan Peluang",
 
-  }else if(durasi <= 16){
+  "Perencanaan Projek dan Model Bisnis",
 
-    tahapan = [
-      "Analisis Kebutuhan",
-      "Perencanaan Projek",
-      "Persiapan Alat dan Bahan",
-      "Pelaksanaan Projek",
-      "Evaluasi",
-      "Presentasi Hasil"
-    ];
+  "Perancangan Solusi/Produk",
 
-  }else{
+  "Pengembangan Produk/Jasa",
 
-    tahapan = [
-      "Analisis Kebutuhan",
-      "Perencanaan Projek",
-      "Desain Solusi",
-      "Persiapan",
-      "Pelaksanaan Tahap 1",
-      "Pelaksanaan Tahap 2",
-      "Evaluasi",
-      "Presentasi Hasil"
-    ];
+  "Uji Produk dan Validasi Pasar",
 
-  }
+  "Implementasi dan Penyempurnaan",
 
+  "Presentasi dan Pameran",
+
+  "Refleksi dan Pengembangan Lanjutan"
+
+];
   const blok =
     Math.floor(durasi / tahapan.length);
 
