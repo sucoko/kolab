@@ -6,8 +6,6 @@ async function loadCompetencies(){
 
    console.log("URL:", url);
 
-   alert(url);
-
    const res = await fetch(url);
 
    console.log("Status:", res.status);
