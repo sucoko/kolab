@@ -1,13 +1,3 @@
-async function simpanTema(){
-
- alert("Tombol Simpan diklik");
-
- const durasi = parseInt(
-   document.getElementById('durasi').value
- );
-
- ...
-}
 const API_URL='https://script.google.com/macros/s/AKfycbwGMiiD73Assn_UXuvkZQSrWJp4K6_QiulkGCGKPPHNp9aBrVa9EnNseu3aVQJdDvDr/exec';
 
 async function loadCompetencies(){
