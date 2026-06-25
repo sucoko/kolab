@@ -42,12 +42,22 @@ async function loadCompetencies(){
 }
 
 async function simpanTema(){
+
+ const durasi = parseInt(
+   document.getElementById('durasi').value
+ );
+
+ if(durasi < 1){
+   alert('Durasi minimal 1 minggu');
+   return;
+ }
+
  const payload={
   action:'saveTheme',
   competencyId:document.getElementById('kompetensi').value,
   tema:document.getElementById('tema').value,
   deskripsi:document.getElementById('deskripsi').value,
-  durasi:document.getElementById('durasi').value
+  durasi:durasi
  };
 
  const res=await fetch(API_URL,{
@@ -57,7 +67,9 @@ async function simpanTema(){
  });
 
  const hasil=await res.json();
- document.getElementById('status').innerText=hasil.message;
+
+ document.getElementById('status').innerText =
+   hasil.message;
 }
 
 loadCompetencies();
