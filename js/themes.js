@@ -185,4 +185,3 @@ async function simpanTema() {
     btn.innerHTML = "💾 Simpan Tema";
 
 }
-```
