@@ -1,91 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
+
 <head>
+
 <meta charset="UTF-8">
-<title>KOLAB STAGES TEST 999</title>
 
-<style>
-.stage-card{
-  background:#fff;
-  border-left:6px solid #4f46e5;
-  border-radius:12px;
-  padding:15px;
-  margin-bottom:15px;
-  box-shadow:0 2px 8px rgba(0,0,0,0.08);
-}
+<meta name="viewport"
+      content="width=device-width,initial-scale=1">
 
-.stage-header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
+<title>KOLAB - Tahapan Projek</title>
 
-.stage-title{
-  font-size:18px;
-  font-weight:bold;
-}
-
-.stage-week{
-  color:#666;
-  margin-top:8px;
-}
-
-.stage-desc{
-  margin-top:10px;
-  color:#444;
-}
-
-.stage-action{
-  margin-top:12px;
-}
-
-.btn-delete{
-  background:#ef4444;
-  color:white;
-  border:none;
-  padding:8px 12px;
-  border-radius:6px;
-}
-
-.btn-delete:hover{
-  opacity:0.8;
-}
-body{
-  font-family: Arial, sans-serif;
-  margin:20px;
-}
-
-.card{
-  border:1px solid #ddd;
-  padding:20px;
-  border-radius:10px;
-  max-width:700px;
-}
-
-input,select,textarea{
-  width:100%;
-  padding:8px;
-  margin-top:5px;
-  margin-bottom:10px;
-}
-
-button{
-  padding:10px 20px;
-  cursor:pointer;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  margin-top:20px;
-}
-
-th,td{
-  border:1px solid #ddd;
-  padding:8px;
-}
-
-</style>
+<link rel="stylesheet" href="css/style.css">
 
 </head>
 
@@ -93,56 +18,102 @@ th,td{
 
 <div class="card">
 
-<h2>Tahapan Projek</h2>
+<h2>📋 Tahapan Projek</h2>
 
 <label>Tema Projek</label>
+
 <select id="theme">
-<option value="">Memuat...</option>
+
+<option value="">Memuat Tema...</option>
+
 </select>
 
-<button onclick="generateTahapanAI()">
+<br><br>
+
+<button id="btnAI"
+        onclick="generateTahapanAI()">
+
 🤖 Generate Tahapan AI
+
 </button>
 
 <div id="aiResult"
-     style="
-       margin-top:15px;
-       padding:10px;
-       border:1px solid #ddd;
-       border-radius:8px;
-       background:#f9f9f9;
-     ">
+style="
+margin-top:15px;
+padding:15px;
+border:1px solid #ddd;
+border-radius:10px;
+background:#fafafa;
+min-height:40px;
+">
+
+Belum ada usulan AI.
+
 </div>
+
+<hr>
 
 <label>Urutan</label>
-<input type="number" id="urutan">
+
+<input
+type="number"
+id="urutan"
+min="1">
 
 <label>Nama Tahap</label>
-<input type="text" id="namaTahap">
+
+<input
+type="text"
+id="namaTahap">
 
 <label>Deskripsi Tahap</label>
-<textarea id="deskripsiTahap"></textarea>
+
+<textarea
+id="deskripsiTahap"></textarea>
 
 <label>Minggu Mulai</label>
-<input type="number" id="mingguMulai">
+
+<input
+type="number"
+id="mingguMulai"
+min="1">
 
 <label>Minggu Selesai</label>
-<input type="number" id="mingguSelesai">
 
-<button onclick="simpanTahap()">
-Simpan Tahapan
+<input
+type="number"
+id="mingguSelesai"
+min="1">
+
+<button
+id="btnSimpanTahap"
+onclick="simpanTahap()">
+
+💾 Simpan Tahapan
+
 </button>
+
+<div id="status"></div>
 
 </div>
 
-<h3>Timeline Projek</h3>
+<br>
+
+<div class="card">
+
+<h3>📅 Timeline Projek</h3>
 
 <div id="stageContainer">
 
+Memuat data...
+
 </div>
 
-<script src="api.js"></script>
-<script src="stages.js"></script>
+</div>
+
+<script src="js/api.js"></script>
+<script src="js/stages.js"></script>
 
 </body>
+
 </html>
