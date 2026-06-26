@@ -1,115 +1,286 @@
-<!DOCTYPE html>
-<html lang="id">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-      content="width=device-width,initial-scale=1">
-
-<title>KOLAB - Tahapan Projek</title>
-
-<link rel="stylesheet" href="css/style.css">
-
-</head>
-
 <body>
 
 <div class="card">
 
-<h2>📋 Tahapan Projek</h2>
+<h2>📋 Perancang Tahapan Projek</h2>
 
 <label>Tema Projek</label>
 
 <select id="theme">
-
-<option value="">Memuat Tema...</option>
-
+<option>Memuat Tema...</option>
 </select>
 
 <br><br>
 
-<button id="btnAI"
-        onclick="generateTahapanAI()">
+<button
+id="btnAI"
+onclick="generateTahapanAI()">
 
 🤖 Generate Tahapan AI
 
 </button>
 
-<div id="aiResult"
-style="
-margin-top:15px;
-padding:15px;
-border:1px solid #ddd;
-border-radius:10px;
-background:#fafafa;
-min-height:40px;
-">
+<hr>
 
-Belum ada usulan AI.
+<h3>Usulan Tahapan</h3>
+
+<div id="aiStageList">
+
+<p>Belum ada usulan.</p>
 
 </div>
 
 <hr>
 
-<label>Urutan</label>
+<h3>➕ Tambah Tahapan Sendiri</h3>
 
-<input
-type="number"
-id="urutan"
-min="1">
-
-<label>Nama Tahap</label>
+<label>Nama Tahapan</label>
 
 <input
 type="text"
-id="namaTahap">
+id="customNama">
 
-<label>Deskripsi Tahap</label>
+<label>Deskripsi</label>
 
 <textarea
-id="deskripsiTahap"></textarea>
+id="customDeskripsi"></textarea>
+
+<div style="display:flex;gap:15px;">
+
+<div style="flex:1;">
 
 <label>Minggu Mulai</label>
 
 <input
 type="number"
-id="mingguMulai"
+id="customMulai"
 min="1">
+
+</div>
+
+<div style="flex:1;">
 
 <label>Minggu Selesai</label>
 
 <input
 type="number"
-id="mingguSelesai"
+id="customSelesai"
 min="1">
 
-<button
-id="btnSimpanTahap"
-onclick="simpanTahap()">
+</div>
 
-💾 Simpan Tahapan
+</div>
+
+<button
+onclick="tambahTahapanManual()">
+
+➕ Tambahkan ke Daftar
 
 </button>
+
+<hr>
+
+<div
+style="display:flex;
+gap:10px;
+flex-wrap:wrap;">
+
+<button
+onclick="pilihSemuaAI()">
+
+☑ Pilih Semua
+
+</button>
+
+<button
+onclick="hapusPilihanAI()">
+
+☒ Kosongkan Pilihan
+
+</button>
+
+<button
+id="btnSimpanSemua"
+onclick="simpanTahapanTerpilih()">
+
+💾 Simpan Semua Tahapan
+
+</button>
+
+</div>
 
 <div id="status"></div>
 
 </div>
 
 <br>
-
 <div class="card">
 
-<h3>📅 Timeline Projek</h3>
+<h3>📅 Timeline Tahapan Projek</h3>
+
+<p style="color:#666;font-size:14px;">
+Tahapan yang sudah disimpan akan muncul di bawah ini.
+Guru masih dapat mengubah atau menghapus tahapan apabila diperlukan.
+</p>
 
 <div id="stageContainer">
 
-Memuat data...
+<div style="text-align:center;padding:30px;color:#888;">
+
+Belum ada tahapan yang disimpan.
 
 </div>
 
 </div>
+
+</div>
+
+<!-- ==================================================
+     TEMPLATE KARTU TAHAPAN (digunakan oleh stages.js)
+=================================================== -->
+
+<template id="stageTemplate">
+
+<div class="stage-card">
+
+<div class="stage-header">
+
+<div class="stage-title">
+
+Nama Tahapan
+
+</div>
+
+<div>
+
+<span class="badge-week">
+
+Minggu 1-2
+
+</span>
+
+</div>
+
+</div>
+
+<div class="stage-desc">
+
+Deskripsi Tahapan
+
+</div>
+
+<div class="stage-action">
+
+<button class="btn-edit">
+
+✏ Edit
+
+</button>
+
+<button class="btn-delete">
+
+🗑 Hapus
+
+</button>
+
+</div>
+
+</div>
+
+</template>
+
+<!-- ==================================================
+     STYLE KHUSUS STAGES
+=================================================== -->
+
+<style>
+
+.badge-week{
+
+background:#4f46e5;
+color:white;
+padding:4px 10px;
+border-radius:20px;
+font-size:12px;
+
+}
+
+.stage-action{
+
+display:flex;
+gap:10px;
+margin-top:15px;
+
+}
+
+.btn-edit{
+
+background:#2563eb;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+.btn-delete{
+
+background:#dc2626;
+color:white;
+border:none;
+padding:8px 14px;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+.btn-edit:hover,
+.btn-delete:hover{
+
+opacity:.9;
+
+}
+
+#aiStageList{
+
+margin-top:15px;
+
+}
+
+.ai-item{
+
+display:flex;
+align-items:flex-start;
+gap:10px;
+padding:10px;
+margin-bottom:10px;
+border:1px solid #ddd;
+border-radius:8px;
+background:white;
+
+}
+
+.ai-item:hover{
+
+background:#f7f7ff;
+
+}
+
+.ai-item b{
+
+display:block;
+
+}
+
+.ai-week{
+
+font-size:12px;
+color:#666;
+
+}
+
+</style>
 
 <script src="js/api.js"></script>
 <script src="js/stages.js"></script>
