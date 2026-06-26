@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>KOLAB | Tema Projek</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="page-header">
+
+        <div>
+
+            <h1>📚 Tema Projek</h1>
+
+            <p>
+                Kelola tema projek pembelajaran berbasis PjBL
+            </p>
+
+        </div>
+
+        <button
+            class="btn btn-primary"
+            onclick="showForm()">
+
+            + Tambah Tema
+
+        </button>
+
+    </div>
+
+
+
+    <!-- FORM -->
+
+    <div
+        class="card"
+        id="formCard"
+        style="display:none;">
+
+        <h2>Tambah Tema Projek</h2>
+
+        <div class="form-grid">
+
+            <div class="form-group">
+
+                <label>Konsentrasi Keahlian</label>
+
+                <select id="kompetensi"></select>
+
+            </div>
+
+            <div class="form-group">
+
+                <label>Durasi (Minggu)</label>
+
+                <input
+                    type="number"
+                    id="durasi"
+                    min="1">
+
+            </div>
+
+        </div>
+
+
+        <div class="form-group">
+
+            <label>Nama Tema</label>
+
+            <input
+                type="text"
+                id="tema">
+
+        </div>
+
+        <div class="form-group">
+
+            <label>Deskripsi</label>
+
+            <textarea
+                id="deskripsi"
+                rows="4"></textarea>
+
+        </div>
+
+
+        <div class="button-group">
+
+            <button
+                id="btnSimpan"
+                class="btn btn-primary"
+                onclick="simpanTema()">
+
+                💾 Simpan Tema
+
+            </button>
+
+            <button
+                class="btn"
+                onclick="hideForm()">
+
+                Batal
+
+            </button>
+
+        </div>
+
+        <div id="status"></div>
+
+    </div>
+
+
+
+    <!-- DAFTAR -->
+
+    <div class="card">
+
+        <div class="section-title">
+
+            Daftar Tema Projek
+
+        </div>
+
+        <div id="themeList">
+
+            Memuat data...
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<script src="js/api.js"></script>
+<script src="js/themes.js"></script>
+
+<script>
+
+function showForm(){
+
+    document.getElementById("formCard").style.display="block";
+
+}
+
+function hideForm(){
+
+    document.getElementById("formCard").style.display="none";
+
+}
+
+</script>
+
+</body>
+
+</html>
