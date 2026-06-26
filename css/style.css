@@ -1,312 +1,87 @@
-/* =====================================================
-   KOLAB STYLE V2
-===================================================== */
+<body>
 
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+<div class="container">
 
-body{
-  font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-  background:#f3f6fb;
-  color:#1e293b;
-  line-height:1.6;
-  padding:25px;
-}
+    <div class="card">
 
-/* ===============================
-   CARD
-================================ */
+        <h2>📋 Perancang Tahapan Projek</h2>
 
-.card{
-  background:#ffffff;
-  border-radius:16px;
-  padding:25px;
-  margin-bottom:25px;
-  box-shadow:0 8px 25px rgba(0,0,0,.08);
-}
+        <p style="color:#64748b;margin-top:-8px;margin-bottom:20px;">
+            Susun tahapan projek berdasarkan tema atau gunakan rekomendasi AI.
+        </p>
 
-/* ===============================
-   JUDUL
-================================ */
+        <div class="toolbar">
 
-h1,h2,h3{
-  color:#0f172a;
-  margin-bottom:15px;
-}
+            <div style="flex:1">
 
-h2{
-  font-size:28px;
-}
+                <label>Tema Projek</label>
 
-h3{
-  font-size:20px;
-}
+                <select id="theme">
 
-/* ===============================
-   FORM
-================================ */
+                    <option value="">
+                        Memuat Tema...
+                    </option>
 
-label{
-  display:block;
-  margin-top:15px;
-  margin-bottom:6px;
-  font-weight:600;
-  color:#334155;
-}
+                </select>
 
-input,
-select,
-textarea{
+            </div>
 
-  width:100%;
-  padding:12px 14px;
-  border:1px solid #d1d5db;
-  border-radius:10px;
-  font-size:15px;
-  transition:.25s;
-  background:white;
+            <div>
+
+                <button
+                    id="btnAI"
+                    onclick="generateTahapanAI()">
+
+                    🤖 Generate AI
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="layout">
+.toolbar{
+
+display:flex;
+
+gap:20px;
+
+align-items:flex-end;
+
+margin-top:15px;
 
 }
 
-input:focus,
-select:focus,
-textarea:focus{
+.layout{
 
-  outline:none;
-  border-color:#4f46e5;
-  box-shadow:0 0 0 4px rgba(79,70,229,.15);
+display:grid;
 
-}
+grid-template-columns:420px 1fr;
 
-textarea{
+gap:25px;
 
-  resize:vertical;
-  min-height:100px;
+align-items:start;
+
+margin-top:20px;
 
 }
 
-/* ===============================
-   BUTTON
-================================ */
+@media(max-width:1000px){
 
-button{
+.layout{
 
-  padding:11px 18px;
-  border:none;
-  border-radius:10px;
-  background:#4f46e5;
-  color:white;
-  font-weight:600;
-  cursor:pointer;
-  transition:.25s;
-  width:auto;
-  margin-top:10px;
+grid-template-columns:1fr;
 
 }
 
-button:hover{
+.toolbar{
 
-  background:#4338ca;
+flex-direction:column;
 
-}
-
-button:disabled{
-
-  opacity:.6;
-  cursor:not-allowed;
-
-}
-
-/* ===============================
-   STATUS
-================================ */
-
-#status{
-
-  margin-top:15px;
-  padding:12px;
-  border-radius:10px;
-  background:#eefcf4;
-  color:#15803d;
-  display:none;
-
-}
-
-/* ===============================
-   SUCCESS PANEL
-================================ */
-
-.success-panel{
-
-  margin-top:20px;
-  padding:20px;
-  border-radius:12px;
-  background:#ecfdf5;
-  border-left:6px solid #10b981;
-
-}
-
-.success-buttons{
-
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-top:15px;
-
-}
-
-/* ===============================
-   AI STAGE
-================================ */
-
-#aiStageList{
-
-  margin-top:15px;
-
-}
-
-.ai-item{
-
-  display:flex;
-  align-items:flex-start;
-  gap:12px;
-
-  background:white;
-
-  border:1px solid #e5e7eb;
-
-  border-radius:12px;
-
-  padding:14px;
-
-  margin-bottom:12px;
-
-  transition:.2s;
-
-}
-
-.ai-item:hover{
-
-  border-color:#4f46e5;
-
-  transform:translateY(-2px);
-
-}
-
-.ai-week{
-
-  font-size:13px;
-  color:#64748b;
-  margin-top:3px;
-
-}
-
-/* ===============================
-   TIMELINE
-================================ */
-
-.stage-card{
-
-  background:white;
-
-  border-left:5px solid #4f46e5;
-
-  border-radius:12px;
-
-  padding:18px;
-
-  margin-bottom:15px;
-
-  box-shadow:0 2px 10px rgba(0,0,0,.06);
-
-}
-
-.stage-header{
-
-  display:flex;
-
-  justify-content:space-between;
-
-  align-items:center;
-
-}
-
-.stage-title{
-
-  font-weight:bold;
-
-  font-size:17px;
-
-}
-
-.stage-desc{
-
-  margin-top:10px;
-
-  color:#475569;
-
-}
-
-.stage-action{
-
-  margin-top:15px;
-
-  display:flex;
-
-  gap:8px;
-
-}
-
-.badge-week{
-
-  background:#eef2ff;
-
-  color:#4338ca;
-
-  padding:5px 10px;
-
-  border-radius:20px;
-
-  font-size:12px;
-
-  font-weight:bold;
-
-}
-
-/* ===============================
-   RESPONSIVE
-================================ */
-
-@media(max-width:768px){
-
-.card{
-
-  padding:18px;
-
-}
-
-.stage-header{
-
-  flex-direction:column;
-
-  align-items:flex-start;
-
-  gap:8px;
-
-}
-
-.success-buttons{
-
-  flex-direction:column;
-
-}
-
-button{
-
-  width:100%;
+align-items:stretch;
 
 }
 
