@@ -1,318 +1,298 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>KOLAB | Perancang Tahapan Projek</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+
 <body>
 
-<div class="card">
+<div class="container">
 
-<h2>📋 Perancang Tahapan Projek</h2>
+    <!-- HEADER -->
 
-<label>Tema Projek</label>
+    <div class="card">
 
-<select id="theme">
-<option>Memuat Tema...</option>
-</select>
+        <h2>📋 Perancang Tahapan Projek</h2>
 
-<br><br>
+        <p class="subtitle">
 
-<button
-id="btnAI"
-onclick="generateTahapanAI()">
+            Susun timeline projek berdasarkan tema yang dipilih.
+            Guru dapat menggunakan rekomendasi AI atau membuat tahapan sendiri.
 
-🤖 Generate Tahapan AI
+        </p>
 
-</button>
+        <div class="toolbar">
 
-<hr>
+            <div class="toolbar-left">
 
-<h3>Usulan Tahapan</h3>
+                <label>Tema Projek</label>
 
-<div id="aiStageList">
+                <select id="theme">
 
-<p>Belum ada usulan.</p>
+                    <option value="">
+                        Memuat Tema...
+                    </option>
+
+                </select>
+
+            </div>
+
+            <div class="toolbar-right">
+
+                <button
+                    id="btnAI"
+                    type="button"
+                    onclick="generateTahapanAI()">
+
+                    🤖 Generate Tahapan AI
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- LAYOUT -->
+
+    <div class="layout">
+    <!-- =========================
+         PANEL KIRI
+    ========================== -->
+
+    <div class="left-panel">
+
+        <!-- AI Planner -->
+
+        <div class="card">
+
+            <h3>🤖 Rekomendasi Tahapan AI</h3>
+
+            <p class="subtitle">
+
+                Klik <b>Generate Tahapan AI</b> untuk memperoleh
+                rekomendasi tahapan projek berdasarkan tema yang dipilih.
+
+            </p>
+
+            <div id="aiStageList">
+
+                <div class="empty-state">
+
+                    Belum ada rekomendasi AI.
+
+                    <br><br>
+
+                    Klik tombol
+
+                    <b>🤖 Generate Tahapan AI</b>
+
+                    di bagian atas.
+
+                </div>
+
+            </div>
+
+            <div class="planner-toolbar">
+
+                <button
+                    type="button"
+                    onclick="pilihSemuaAI()">
+
+                    ☑ Pilih Semua
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="hapusPilihanAI()">
+
+                    ☐ Kosongkan
+
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- Tambah Tahapan -->
+
+        <div class="card">
+
+            <h3>➕ Tambah Tahapan Manual</h3>
+
+            <p class="subtitle">
+
+                Digunakan jika guru ingin membuat tahapan
+                sendiri di luar rekomendasi AI.
+
+            </p>
+
+            <label>Nama Tahapan</label>
+
+            <input
+                id="customNama"
+                type="text"
+                placeholder="Contoh : Observasi Industri">
+
+            <label>Deskripsi</label>
+
+            <textarea
+                id="customDeskripsi"
+                placeholder="Deskripsi singkat tahapan"></textarea>
+
+            <div class="row2">
+
+                <div>
+
+                    <label>Minggu Mulai</label>
+
+                    <input
+                        id="customMulai"
+                        type="number"
+                        min="1">
+
+                </div>
+
+                <div>
+
+                    <label>Minggu Selesai</label>
+
+                    <input
+                        id="customSelesai"
+                        type="number"
+                        min="1">
+
+                </div>
+
+            </div>
+
+            <button
+                type="button"
+                class="btn-secondary"
+                onclick="tambahTahapanManual()">
+
+                ➕ Tambahkan ke Daftar
+
+            </button>
+
+            <hr class="divider">
+
+            <button
+                id="btnSimpanSemua"
+                type="button"
+                class="btn-success"
+                onclick="simpanTahapanTerpilih()">
+
+                💾 Simpan Semua Tahapan
+
+            </button>
+
+            <div id="status"></div>
+
+        </div>
+
+    </div>
+        <!-- =========================
+         PANEL KANAN
+    ========================== -->
+
+    <div class="right-panel">
+
+        <div class="card">
+
+            <div class="timeline-header">
+
+                <div>
+
+                    <h3>📅 Timeline Projek</h3>
+
+                    <p class="subtitle">
+
+                        Tahapan yang telah disusun akan muncul di sini.
+
+                    </p>
+
+                </div>
+
+                <button
+                    type="button"
+                    class="btn-refresh"
+                    onclick="loadStages()">
+
+                    🔄 Refresh
+
+                </button>
+
+            </div>
+
+            <div id="stageContainer">
+
+                <div class="empty-state">
+
+                    Belum ada tahapan projek.
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- PANEL SUKSES -->
+
+        <div
+            id="successPanel"
+            class="card success-panel"
+            style="display:none;">
+
+            <h3>✅ Tahapan Berhasil Disimpan</h3>
+
+            <p id="successInfo">
+
+            </p>
+
+            <div class="planner-toolbar">
+
+                <button
+                    type="button"
+                    onclick="loadStages()">
+
+                    📅 Lihat Timeline
+
+                </button>
+
+                <button
+                    type="button"
+                    onclick="window.location.href='dashboard.html'">
+
+                    🏠 Dashboard
+
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
 
 </div>
 
-<hr>
-
-<h3>➕ Tambah Tahapan Sendiri</h3>
-
-<label>Nama Tahapan</label>
-
-<input
-type="text"
-id="customNama">
-
-<label>Deskripsi</label>
-
-<textarea
-id="customDeskripsi"></textarea>
-
-<div style="display:flex;gap:15px;">
-
-<div style="flex:1;">
-
-<label>Minggu Mulai</label>
-
-<input
-type="number"
-id="customMulai"
-min="1">
-
 </div>
-
-<div style="flex:1;">
-
-<label>Minggu Selesai</label>
-
-<input
-type="number"
-id="customSelesai"
-min="1">
-
-</div>
-
-</div>
-
-<button
-onclick="tambahTahapanManual()">
-
-➕ Tambahkan ke Daftar
-
-</button>
-
-<hr>
-
-<div
-style="display:flex;
-gap:10px;
-flex-wrap:wrap;">
-
-<button
-onclick="pilihSemuaAI()">
-
-☑ Pilih Semua
-
-</button>
-
-<button
-onclick="hapusPilihanAI()">
-
-☒ Kosongkan Pilihan
-
-</button>
-
-<button
-id="btnSimpanSemua"
-onclick="simpanTahapanTerpilih()">
-
-💾 Simpan Semua Tahapan
-
-</button>
-
-</div>
-
-<div id="status"></div>
-
-<!-- Panel Sukses -->
-
-<div id="successPanel"
-     class="success-panel"
-     style="display:none;">
-
-<h3>✅ Tahapan Berhasil Disimpan</h3>
-
-<p id="successInfo"></p>
-
-<div class="success-buttons">
-
-<button onclick="loadStages()">
-
-📅 Lihat Timeline
-
-</button>
-
-<button onclick="kembaliDashboard()">
-
-🏠 Kembali ke Dashboard
-
-</button>
-
-</div>
-
-</div>
-     
-</div>
-
-<br>
-<div class="card">
-
-<h3>📅 Timeline Tahapan Projek</h3>
-
-<p style="color:#666;font-size:14px;">
-Tahapan yang sudah disimpan akan muncul di bawah ini.
-Guru masih dapat mengubah atau menghapus tahapan apabila diperlukan.
-</p>
-
-<div id="stageContainer">
-
-<div style="text-align:center;padding:30px;color:#888;">
-
-Belum ada tahapan yang disimpan.
-
-</div>
-
-</div>
-
-</div>
-
-<!-- ==================================================
-     TEMPLATE KARTU TAHAPAN (digunakan oleh stages.js)
-=================================================== -->
-
-<template id="stageTemplate">
-
-<div class="stage-card">
-
-<div class="stage-header">
-
-<div class="stage-title">
-
-Nama Tahapan
-
-</div>
-
-<div>
-
-<span class="badge-week">
-
-Minggu 1-2
-
-</span>
-
-</div>
-
-</div>
-
-<div class="stage-desc">
-
-Deskripsi Tahapan
-
-</div>
-
-<div class="stage-action">
-
-<button class="btn-edit">
-
-✏ Edit
-
-</button>
-
-<button class="btn-delete">
-
-🗑 Hapus
-
-</button>
-
-</div>
-
-</div>
-
-</template>
-
-<!-- ==================================================
-     STYLE KHUSUS STAGES
-=================================================== -->
-
-<style>
-
-.badge-week{
-
-background:#4f46e5;
-color:white;
-padding:4px 10px;
-border-radius:20px;
-font-size:12px;
-
-}
-
-.stage-action{
-
-display:flex;
-gap:10px;
-margin-top:15px;
-
-}
-
-.btn-edit{
-
-background:#2563eb;
-color:white;
-border:none;
-padding:8px 14px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-.btn-delete{
-
-background:#dc2626;
-color:white;
-border:none;
-padding:8px 14px;
-border-radius:6px;
-cursor:pointer;
-
-}
-
-.btn-edit:hover,
-.btn-delete:hover{
-
-opacity:.9;
-
-}
-
-#aiStageList{
-
-margin-top:15px;
-
-}
-
-.ai-item{
-
-display:flex;
-align-items:flex-start;
-gap:10px;
-padding:10px;
-margin-bottom:10px;
-border:1px solid #ddd;
-border-radius:8px;
-background:white;
-
-}
-
-.ai-item:hover{
-
-background:#f7f7ff;
-
-}
-
-.ai-item b{
-
-display:block;
-
-}
-
-.ai-week{
-
-font-size:12px;
-color:#666;
-
-}
-
-</style>
 
 <script src="js/api.js"></script>
 <script src="js/stages.js"></script>
 
 </body>
-
 </html>
