@@ -86,3 +86,326 @@ align-items:stretch;
 }
 
 }
+<!-- ==========================
+     PANEL KIRI
+=========================== -->
+
+<div class="left-panel">
+
+    <div class="card">
+
+        <h3>🤖 Usulan Tahapan AI</h3>
+
+        <p class="subtitle">
+            Pilih tahapan yang ingin digunakan atau tambahkan tahapan sendiri.
+        </p>
+
+        <div id="aiStageList">
+
+            <div class="empty-state">
+
+                Klik
+                <b>Generate AI</b>
+                untuk membuat rekomendasi tahapan.
+
+            </div>
+
+        </div>
+
+        <div class="planner-toolbar">
+
+            <button
+                type="button"
+                onclick="pilihSemuaAI()">
+
+                ☑ Pilih Semua
+
+            </button>
+
+            <button
+                type="button"
+                onclick="hapusPilihanAI()">
+
+                ☐ Kosongkan
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>➕ Tambah Tahapan Manual</h3>
+
+        <p class="subtitle">
+            Digunakan apabila guru ingin menambahkan tahapan di luar rekomendasi AI.
+        </p>
+
+        <label>Nama Tahapan</label>
+
+        <input
+            id="customNama"
+            type="text"
+            placeholder="Contoh : Observasi Industri">
+
+        <label>Deskripsi</label>
+
+        <textarea
+            id="customDeskripsi"
+            placeholder="Tuliskan deskripsi singkat..."></textarea>
+
+        <div class="row2">
+
+            <div>
+
+                <label>Minggu Mulai</label>
+
+                <input
+                    id="customMulai"
+                    type="number">
+
+            </div>
+
+            <div>
+
+                <label>Minggu Selesai</label>
+
+                <input
+                    id="customSelesai"
+                    type="number">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            onclick="tambahTahapanManual()">
+
+            ➕ Tambahkan ke Daftar
+
+        </button>
+
+        <hr class="divider">
+
+        <button
+            id="btnSimpanSemua"
+            type="button"
+            onclick="simpanTahapanTerpilih()">
+
+            💾 Simpan Semua Tahapan
+
+        </button>
+
+        <div id="status"></div>
+
+    </div>
+
+</div>
+<!-- ==========================
+     PANEL KIRI
+=========================== -->
+
+<div class="left-panel">
+
+    <div class="card">
+
+        <h3>🤖 Usulan Tahapan AI</h3>
+
+        <p class="subtitle">
+            Pilih tahapan yang ingin digunakan atau tambahkan tahapan sendiri.
+        </p>
+
+        <div id="aiStageList">
+
+            <div class="empty-state">
+
+                Klik
+                <b>Generate AI</b>
+                untuk membuat rekomendasi tahapan.
+
+            </div>
+
+        </div>
+
+        <div class="planner-toolbar">
+
+            <button
+                type="button"
+                onclick="pilihSemuaAI()">
+
+                ☑ Pilih Semua
+
+            </button>
+
+            <button
+                type="button"
+                onclick="hapusPilihanAI()">
+
+                ☐ Kosongkan
+
+            </button>
+
+        </div>
+
+    </div>
+
+    <div class="card">
+
+        <h3>➕ Tambah Tahapan Manual</h3>
+
+        <p class="subtitle">
+            Digunakan apabila guru ingin menambahkan tahapan di luar rekomendasi AI.
+        </p>
+
+        <label>Nama Tahapan</label>
+
+        <input
+            id="customNama"
+            type="text"
+            placeholder="Contoh : Observasi Industri">
+
+        <label>Deskripsi</label>
+
+        <textarea
+            id="customDeskripsi"
+            placeholder="Tuliskan deskripsi singkat..."></textarea>
+
+        <div class="row2">
+
+            <div>
+
+                <label>Minggu Mulai</label>
+
+                <input
+                    id="customMulai"
+                    type="number">
+
+            </div>
+
+            <div>
+
+                <label>Minggu Selesai</label>
+
+                <input
+                    id="customSelesai"
+                    type="number">
+
+            </div>
+
+        </div>
+
+        <button
+            type="button"
+            onclick="tambahTahapanManual()">
+
+            ➕ Tambahkan ke Daftar
+
+        </button>
+
+        <hr class="divider">
+
+        <button
+            id="btnSimpanSemua"
+            type="button"
+            onclick="simpanTahapanTerpilih()">
+
+            💾 Simpan Semua Tahapan
+
+        </button>
+
+        <div id="status"></div>
+
+    </div>
+
+</div>
+/*==============================
+LEFT PANEL
+==============================*/
+
+.left-panel{
+
+display:flex;
+
+flex-direction:column;
+
+gap:20px;
+
+}
+
+.subtitle{
+
+font-size:14px;
+
+color:#64748b;
+
+margin-bottom:15px;
+
+}
+
+.empty-state{
+
+padding:30px;
+
+border:2px dashed #cbd5e1;
+
+border-radius:12px;
+
+text-align:center;
+
+color:#64748b;
+
+background:#f8fafc;
+
+}
+
+.planner-toolbar{
+
+display:flex;
+
+gap:10px;
+
+margin-top:15px;
+
+flex-wrap:wrap;
+
+}
+
+.row2{
+
+display:grid;
+
+grid-template-columns:1fr 1fr;
+
+gap:15px;
+
+margin-top:10px;
+
+}
+
+.divider{
+
+margin:20px 0;
+
+border:none;
+
+border-top:1px solid #e5e7eb;
+
+}
+
+#btnSimpanSemua{
+
+background:#10b981;
+
+width:100%;
+
+font-size:16px;
+
+}
+
+#btnSimpanSemua:hover{
+
+background:#059669;
+
+}
