@@ -1,35 +1,85 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta charset="utf-8">
-<title>KOLAB - Ketua Konsentrasi</title>
-<link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>KOLAB - Tema Projek</title>
+
+<link rel="stylesheet" href="style.css">
+
 </head>
+
 <body>
+
 <div class="container">
 
-<h1>📚 Input Tema Projek</h1>
+    <h1>📚 Input Tema Projek</h1>
 
-<label>Konsentrasi Keahlian</label>
-<select id="kompetensi"></select>
+    <label for="kompetensi">
+        Konsentrasi Keahlian
+    </label>
 
-<label>Tema Projek</label>
-<input type="text" id="tema">
+    <select id="kompetensi">
+        <option>Memuat data...</option>
+    </select>
 
-<label>Deskripsi</label>
-<textarea id="deskripsi"></textarea>
+    <label for="tema">
+        Tema Projek
+    </label>
 
-<label>Durasi (Minggu)</label>
-<input type="number" id="durasi" min="1">
+    <input
+        type="text"
+        id="tema"
+        placeholder="Masukkan Tema Projek">
 
-<button onclick="simpanTema()">
-  💾 Simpan Tema
-</button>
+    <label for="deskripsi">
+        Deskripsi
+    </label>
 
-<div id="status"></div>
+    <textarea
+        id="deskripsi"
+        placeholder="Tuliskan deskripsi tema projek">
+    </textarea>
+
+    <label for="durasi">
+        Durasi (Minggu)
+    </label>
+
+    <input
+        type="number"
+        id="durasi"
+        min="1"
+        placeholder="Contoh : 16">
+
+    <button
+        id="btnSimpan"
+        onclick="simpanTema()">
+
+        💾 Simpan Tema
+
+    </button>
+
+    <div id="status"></div>
 
 </div>
 
-<script src="js/api.js"></script>
+<br>
+
+<div class="container">
+
+    <h2>Daftar Tema Projek</h2>
+
+    <div id="themeList">
+
+        Memuat data...
+
+    </div>
+
+</div>
+
+<script src="api.js"></script>
+<script src="themes.js"></script>
+
 </body>
 </html>
