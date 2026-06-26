@@ -1,85 +1,188 @@
-const API_URL='https://script.google.com/macros/s/AKfycbwGMiiD73Assn_UXuvkZQSrWJp4K6_QiulkGCGKPPHNp9aBrVa9EnNseu3aVQJdDvDr/exec';
+```javascript
+// ================================
+// THEMES.JS
+// ================================
 
-async function loadCompetencies(){
+window.onload = function () {
+    loadCompetencies();
+    loadThemes();
+};
 
- try{
+// ================================
+// LOAD KONSENTRASI KEAHLIAN
+// ================================
 
-   const res = await fetch(API_URL + '?action=getCompetencies');
-   
-   console.log("Status:", res.status);
+async function loadCompetencies() {
 
-   const data = await res.json();
+    try {
 
-   console.log("Data:", data);
+        const data = await apiGet("getCompetencies");
 
-   const select = document.getElementById('kompetensi');
+        const select = document.getElementById("kompetensi");
 
-   console.log("Select:", select);
+        select.innerHTML = "";
 
-   if(!select) return;
+        data.forEach(item => {
 
-   data.forEach(item=>{
+            select.innerHTML += `
+                <option value="${item.CompetencyID}">
+                    ${item["Nama KK"]}
+                </option>
+            `;
 
-     const opt = document.createElement('option');
+        });
 
-     opt.value = item.CompetencyID;
-     opt.textContent = item['Nama KK'];
+    } catch (err) {
 
-     select.appendChild(opt);
+        console.error(err);
+        alert("Gagal memuat Konsentrasi Keahlian.");
 
-   });
-
-   console.log("Selesai");
-
- }catch(err){
-
-   console.error("ERROR:", err);
-
- }
-
-}
-
-async function simpanTema(){
-
- try{
-
-   const durasi = parseInt(
-     document.getElementById('durasi').value
-   );
-
-   if(durasi < 1){
-     alert('Durasi minimal 1 minggu');
-     return;
-   }
-
-   const url =
-     API_URL +
-     '?action=saveTheme' +
-     '&competencyId=' + encodeURIComponent(document.getElementById('kompetensi').value) +
-     '&tema=' + encodeURIComponent(document.getElementById('tema').value) +
-     '&deskripsi=' + encodeURIComponent(document.getElementById('deskripsi').value) +
-     '&durasi=' + encodeURIComponent(durasi);
-
-   console.log("URL:", url);
-
-   const res = await fetch(url);
-
-   console.log("Status:", res.status);
-
-   const hasil = await res.json();
-
-   console.log("Hasil:", hasil);
-
-   document.getElementById('status').innerText =
-     hasil.message;
-
- }catch(err){
-
-   console.error("ERROR SIMPAN:", err);
-
- }
+    }
 
 }
 
 
-loadCompetencies();
+// ================================
+// LOAD DAFTAR TEMA
+// ================================
+
+async function loadThemes() {
+
+    try {
+
+        const data = await apiGet("getThemes");
+
+        const list = document.getElementById("themeList");
+
+        if (data.length == 0) {
+
+            list.innerHTML =
+                "<p>Belum ada Tema Projek.</p>";
+
+            return;
+
+        }
+
+        let html = "";
+
+        data.forEach(item => {
+
+            html += `
+
+            <div class="theme-card">
+
+                <h3>${item.Tema}</h3>
+
+                <p>
+                    <b>Konsentrasi :</b>
+                    ${item.CompetencyID}
+                </p>
+
+                <p>
+                    <b>Durasi :</b>
+                    ${item.DurasiMinggu} Minggu
+                </p>
+
+                <p>
+                    ${item.Deskripsi}
+                </p>
+
+            </div>
+
+            `;
+
+        });
+
+        list.innerHTML = html;
+
+    } catch (err) {
+
+        console.error(err);
+
+    }
+
+}
+
+
+
+// ================================
+// SIMPAN
+// ================================
+
+async function simpanTema() {
+
+    const btn = document.getElementById("btnSimpan");
+
+    if (btn.disabled) return;
+
+    const competencyId =
+        document.getElementById("kompetensi").value;
+
+    const tema =
+        document.getElementById("tema").value.trim();
+
+    const deskripsi =
+        document.getElementById("deskripsi").value.trim();
+
+    const durasi =
+        parseInt(document.getElementById("durasi").value);
+
+    if (tema == "") {
+
+        alert("Tema belum diisi.");
+
+        return;
+
+    }
+
+    if (durasi < 1 || isNaN(durasi)) {
+
+        alert("Durasi minimal 1 minggu.");
+
+        return;
+
+    }
+
+    btn.disabled = true;
+    btn.innerHTML = "⏳ Menyimpan...";
+
+    try {
+
+        const url =
+            API_URL +
+            "?action=saveTheme" +
+            "&competencyId=" + encodeURIComponent(competencyId) +
+            "&tema=" + encodeURIComponent(tema) +
+            "&deskripsi=" + encodeURIComponent(deskripsi) +
+            "&durasi=" + encodeURIComponent(durasi);
+
+        const res = await fetch(url);
+
+        const hasil = await res.json();
+
+        document.getElementById("status").innerHTML =
+            hasil.message;
+
+        // reset form
+
+        document.getElementById("tema").value = "";
+        document.getElementById("deskripsi").value = "";
+        document.getElementById("durasi").value = "";
+
+        hideForm();
+
+        await loadThemes();
+
+    } catch (err) {
+
+        console.error(err);
+
+        alert("Gagal menyimpan data.");
+
+    }
+
+    btn.disabled = false;
+    btn.innerHTML = "💾 Simpan Tema";
+
+}
+```
