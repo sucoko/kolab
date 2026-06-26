@@ -1,60 +1,63 @@
 /*=====================================================
-  KOLAB STAGES.JS V2
-======================================================*/
+KOLAB STAGES V3
+=====================================================*/
 
-document.addEventListener("DOMContentLoaded", async () => {
+let plannerStages = [];
+
+document.addEventListener("DOMContentLoaded", async ()=>{
 
     await loadThemes();
+
     await loadStages();
 
     document
-        .getElementById("theme")
-        .addEventListener("change", loadStages);
+    .getElementById("theme")
+    .addEventListener("change",async()=>{
+
+        plannerStages=[];
+
+        renderPlanner();
+
+        await loadStages();
+
+    });
 
 });
 
 /*=====================================================
 LOAD THEMES
-======================================================*/
+=====================================================*/
 
-async function loadThemes() {
+async function loadThemes(){
 
-    try {
+    try{
 
-        const data = await apiGet("getThemes");
+        const data=
+        await apiGet("getThemes");
 
-        const select =
-            document.getElementById("theme");
+        const select=
+        document.getElementById("theme");
 
-        select.innerHTML =
-            '<option value="">Pilih Tema Projek</option>';
+        select.innerHTML=
+        '<option value="">Pilih Tema Projek</option>';
 
-        if (!Array.isArray(data) || data.length === 0) {
+        data.forEach(t=>{
 
-            select.innerHTML +=
-                '<option value="">Belum ada tema</option>';
-
-            return;
-
-        }
-
-        data.forEach(theme => {
-
-            select.innerHTML += `
-                <option value="${theme.ThemeID}">
-                    ${theme.Tema}
-                </option>
+            select.innerHTML+=`
+            <option value="${t.ThemeID}">
+            ${t.Tema}
+            </option>
             `;
 
         });
 
     }
 
-    catch (err) {
+    catch(e){
 
-        console.error(err);
+        console.log(e);
 
-        alert("Gagal memuat daftar tema.");
+        alert("Gagal memuat tema.");
 
     }
 
@@ -62,52 +65,57 @@ async function loadThemes() {
 
 /*=====================================================
 LOAD STAGES
-======================================================*/
+=====================================================*/
 
-async function loadStages() {
+async function loadStages(){
 
-    try {
+    const container=
+    document.getElementById("stageContainer");
 
-        const themeId =
-            document.getElementById("theme").value;
+    container.innerHTML="Memuat...";
 
-        let data =
-            await apiGet("getStages");
+    try{
 
-        if (themeId) {
+        const themeId=
+        document.getElementById("theme").value;
 
-            data =
-                data.filter(
-                    s => s.ThemeID === themeId
-                );
+        let data=
+        await apiGet("getStages");
+
+        if(themeId){
+
+            data=data.filter(
+
+            s=>s.ThemeID===themeId
+
+            );
 
         }
 
-        const container =
-            document.getElementById(
-                "stageContainer"
-            );
+        data.sort(
 
-        container.innerHTML = "";
+        (a,b)=>
 
-        if (data.length === 0) {
+        Number(a.Urutan)-
 
-            container.innerHTML =
-                "<p>Belum ada tahapan.</p>";
+        Number(b.Urutan)
+
+        );
+
+        if(data.length===0){
+
+            container.innerHTML=
+            "<p>Belum ada tahapan.</p>";
 
             return;
 
         }
 
-        data.sort(
-            (a, b) =>
-                Number(a.Urutan) -
-                Number(b.Urutan)
-        );
+        let html="";
 
-        data.forEach(stage => {
+        data.forEach(stage=>{
 
-            container.innerHTML += `
+            html+=`
 
 <div class="stage-card">
 
@@ -115,18 +123,18 @@ async function loadStages() {
 
 <div class="stage-title">
 
-${stage.Urutan}. ${stage.NamaTahap}
+${stage.Urutan}.
+${stage.NamaTahap}
 
 </div>
 
-</div>
+<span class="badge-week">
 
-<div class="stage-week">
-
-📅 Minggu
 ${stage.MingguMulai}
 -
 ${stage.MingguSelesai}
+
+</span>
 
 </div>
 
@@ -154,291 +162,31 @@ onclick="hapusTahap('${stage.StageID}')">
 
         });
 
-    }
-
-    catch (err) {
-
-        console.error(err);
-
-        alert("Gagal memuat tahapan.");
+        container.innerHTML=html;
 
     }
 
-}
+    catch(e){
 
-/*=====================================================
-VALIDASI
-======================================================*/
+        console.log(e);
 
-function validasiForm() {
-
-    const themeId =
-        document.getElementById("theme").value;
-
-    const urutan =
-        document.getElementById("urutan").value;
-
-    const nama =
-        document.getElementById("namaTahap").value;
-
-    const mulai =
-        document.getElementById("mingguMulai").value;
-
-    const selesai =
-        document.getElementById("mingguSelesai").value;
-
-    if (!themeId) {
-
-        alert("Pilih Tema Projek.");
-
-        return false;
-
-    }
-
-    if (!urutan) {
-
-        alert("Urutan belum diisi.");
-
-        return false;
-
-    }
-
-    if (nama.trim() === "") {
-
-        alert("Nama Tahap belum diisi.");
-
-        return false;
-
-    }
-
-    if (!mulai || !selesai) {
-
-        alert("Minggu belum lengkap.");
-
-        return false;
-
-    }
-
-    if (Number(mulai) > Number(selesai)) {
-
-        alert("Minggu mulai tidak boleh lebih besar.");
-
-        return false;
-
-    }
-
-    return true;
-
-}
-/*=====================================================
-SIMPAN TAHAP
-======================================================*/
-
-async function simpanTahap() {
-
-    if (!validasiForm()) return;
-
-    const btn =
-        document.getElementById("btnSimpanTahap");
-
-    btn.disabled = true;
-    btn.innerHTML = "⏳ Menyimpan...";
-
-    try {
-
-        const themeId =
-            document.getElementById("theme").value;
-
-        const urutan =
-            document.getElementById("urutan").value;
-
-        const namaTahap =
-            document.getElementById("namaTahap").value;
-
-        const deskripsiTahap =
-            document.getElementById("deskripsiTahap").value;
-
-        const mingguMulai =
-            document.getElementById("mingguMulai").value;
-
-        const mingguSelesai =
-            document.getElementById("mingguSelesai").value;
-
-        const url =
-            API_URL +
-            "?action=saveStage" +
-            "&themeId=" + encodeURIComponent(themeId) +
-            "&urutan=" + encodeURIComponent(urutan) +
-            "&namaTahap=" + encodeURIComponent(namaTahap) +
-            "&deskripsiTahap=" + encodeURIComponent(deskripsiTahap) +
-            "&mingguMulai=" + encodeURIComponent(mingguMulai) +
-            "&mingguSelesai=" + encodeURIComponent(mingguSelesai);
-
-        const response =
-            await fetch(url);
-
-        const json =
-            await response.json();
-
-        alert(json.message);
-
-        resetForm();
-
-        await loadStages();
-
-    }
-
-    catch (err) {
-
-        console.error(err);
-
-        alert("Gagal menyimpan tahapan.");
-
-    }
-
-    finally {
-
-        btn.disabled = false;
-        btn.innerHTML = "💾 Simpan Tahapan";
+        container.innerHTML=
+        "Gagal memuat data.";
 
     }
 
 }
-
 /*=====================================================
-RESET FORM
-======================================================*/
+AI STAGE PLANNER
+=====================================================*/
 
-function resetForm() {
+async function generateTahapanAI(){
 
-    document.getElementById("urutan").value = "";
-    document.getElementById("namaTahap").value = "";
-    document.getElementById("deskripsiTahap").value = "";
-    document.getElementById("mingguMulai").value = "";
-    document.getElementById("mingguSelesai").value = "";
+    try{
 
-}
+        const theme=await getSelectedTheme();
 
-/*=====================================================
-HAPUS TAHAP
-======================================================*/
-
-async function hapusTahap(stageId) {
-
-    const ok =
-        confirm("Yakin ingin menghapus tahapan ini?");
-
-    if (!ok) return;
-
-    try {
-
-        const result =
-            await fetch(
-
-                API_URL +
-                "?action=deleteStage" +
-                "&stageId=" +
-                encodeURIComponent(stageId)
-
-            );
-
-        const json =
-            await result.json();
-
-        alert(json.message);
-
-        await loadStages();
-
-    }
-
-    catch (err) {
-
-        console.error(err);
-
-        alert("Gagal menghapus tahapan.");
-
-    }
-
-}
-
-/*=====================================================
-AMBIL DETAIL TEMA
-======================================================*/
-
-async function getSelectedTheme() {
-
-    const themeId =
-        document.getElementById("theme").value;
-
-    if (!themeId) return null;
-
-    const themes =
-        await apiGet("getThemes");
-
-    return themes.find(
-        t => t.ThemeID === themeId
-    );
-
-}
-
-/*=====================================================
-STATUS
-======================================================*/
-
-function setStatus(text) {
-
-    const el =
-        document.getElementById("status");
-
-    if (!el) return;
-
-    el.innerHTML = text;
-
-}
-
-/*=====================================================
-SORTING
-======================================================*/
-
-function sortStages(data) {
-
-    return data.sort(
-
-        (a, b) =>
-
-            Number(a.Urutan) -
-            Number(b.Urutan)
-
-    );
-
-}
-
-/*=====================================================
-BERSIHKAN AI
-======================================================*/
-
-function clearAIResult() {
-
-    const box =
-        document.getElementById("aiResult");
-
-    if (!box) return;
-
-    box.innerHTML =
-        "Belum ada usulan AI.";
-
-}
-/*=====================================================
-AI GENERATOR
-======================================================*/
-
-async function generateTahapanAI() {
-
-    try {
-
-        const theme = await getSelectedTheme();
-
-        if (!theme) {
+        if(!theme){
 
             alert("Pilih Tema Projek terlebih dahulu.");
 
@@ -446,128 +194,84 @@ async function generateTahapanAI() {
 
         }
 
-        const durasi =
-            Number(theme.DurasiMinggu);
+        plannerStages=[];
 
-        if (!durasi || durasi < 1) {
+        const durasi=
+        Number(theme.DurasiMinggu);
 
-            alert("Durasi tema belum tersedia.");
+        const daftar=[
 
-            return;
+        "Identifikasi Masalah",
 
-        }
+        "Observasi Lapangan",
 
-        const daftarTahapan = [
+        "Perencanaan Projek",
 
-            "Identifikasi Masalah dan Peluang",
+        "Perancangan Solusi",
 
-            "Perencanaan Projek",
+        "Pengembangan Produk",
 
-            "Perancangan Solusi",
+        "Pengujian Produk",
 
-            "Pengembangan Produk/Jasa",
+        "Presentasi Hasil",
 
-            "Pengujian Produk",
-
-            "Implementasi",
-
-            "Presentasi Hasil",
-
-            "Refleksi dan Evaluasi"
+        "Refleksi"
 
         ];
 
-        const blok =
-            Math.max(
-                1,
-                Math.floor(durasi / daftarTahapan.length)
-            );
+        const blok=
+        Math.max(
+        1,
+        Math.floor(durasi/daftar.length)
+        );
 
-        let mingguAwal = 1;
+        let mulai=1;
 
-        let html = `
-        <h3>🤖 Usulan Tahapan AI</h3>
+        daftar.forEach((nama,index)=>{
 
-        <table>
+            let selesai;
 
-        <tr>
+            if(index==daftar.length-1){
 
-        <th>Urut</th>
-
-        <th>Tahapan</th>
-
-        <th>Minggu</th>
-
-        </tr>
-
-        `;
-
-        daftarTahapan.forEach((nama,index)=>{
-
-            let mingguAkhir;
-
-            if(index===daftarTahapan.length-1){
-
-                mingguAkhir=durasi;
+                selesai=durasi;
 
             }else{
 
-                mingguAkhir=
-                mingguAwal+
+                selesai=
+                mulai+
                 blok-
                 1;
 
             }
 
-            html+=`
+            plannerStages.push({
 
-            <tr>
+                checked:true,
 
-            <td>${index+1}</td>
+                urutan:index+1,
 
-            <td>${nama}</td>
+                nama:nama,
 
-            <td>
+                deskripsi:"",
 
-            ${mingguAwal}
-            -
-            ${mingguAkhir}
+                mulai:mulai,
 
-            </td>
+                selesai:selesai
 
-            </tr>
+            });
 
-            `;
-
-            mingguAwal=
-            mingguAkhir+1;
+            mulai=
+            selesai+1;
 
         });
 
-        html+=`
-
-        </table>
-
-        <br>
-
-        <button
-        onclick="isiTahapanPertama()">
-
-        Gunakan Tahapan Pertama
-
-        </button>
-
-        `;
-
-        document
-        .getElementById("aiResult")
-        .innerHTML=html;
+        renderPlanner();
 
     }
 
     catch(err){
 
-        console.error(err);
+        console.log(err);
 
         alert("Generate AI gagal.");
 
@@ -576,79 +280,671 @@ async function generateTahapanAI() {
 }
 
 /*=====================================================
-ISI FORM DARI AI
-======================================================*/
+RENDER PLANNER
+=====================================================*/
 
-function isiTahapanPertama(){
+function renderPlanner(){
 
-    document.getElementById("urutan").value=1;
+    const box=
+    document.getElementById("aiStageList");
 
-    document.getElementById("namaTahap").value=
-    "Identifikasi Masalah dan Peluang";
+    if(plannerStages.length==0){
 
-    document.getElementById("deskripsiTahap").value=
-    "Mengidentifikasi masalah, kebutuhan, peluang, dan menentukan fokus projek.";
+        box.innerHTML=
+        "<p>Belum ada usulan tahapan.</p>";
 
-    document.getElementById("mingguMulai").value=1;
+        return;
 
-    document.getElementById("mingguSelesai").value=2;
+    }
+
+    let html="";
+
+    plannerStages.forEach((s,index)=>{
+
+        html+=`
+
+<div class="ai-item">
+
+<input
+type="checkbox"
+
+${s.checked?"checked":""}
+
+onchange="plannerStages[${index}].checked=this.checked">
+
+<div style="flex:1;">
+
+<b>
+
+${s.urutan}.
+${s.nama}
+
+</b>
+
+<div class="ai-week">
+
+Minggu
+${s.mulai}
+-
+${s.selesai}
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+    });
+
+    box.innerHTML=html;
 
 }
 
 /*=====================================================
-TIMELINE
-======================================================*/
+PILIH SEMUA
+=====================================================*/
 
-async function refreshTimeline(){
+function pilihSemuaAI(){
 
-    await loadStages();
+    plannerStages.forEach(s=>{
+
+        s.checked=true;
+
+    });
+
+    renderPlanner();
 
 }
 
 /*=====================================================
-EDIT TAHAP
-======================================================*/
+HAPUS PILIHAN
+=====================================================*/
 
-function editTahap(stage){
+function hapusPilihanAI(){
 
-    document.getElementById("urutan").value=
-    stage.Urutan;
+    plannerStages.forEach(s=>{
 
-    document.getElementById("namaTahap").value=
-    stage.NamaTahap;
+        s.checked=false;
 
-    document.getElementById("deskripsiTahap").value=
-    stage.DeskripsiTahap;
+    });
 
-    document.getElementById("mingguMulai").value=
-    stage.MingguMulai;
+    renderPlanner();
 
-    document.getElementById("mingguSelesai").value=
-    stage.MingguSelesai;
+}
+
+/*=====================================================
+TAMBAH TAHAPAN MANUAL
+=====================================================*/
+
+function tambahTahapanManual(){
+
+    const nama=
+    document.getElementById("customNama").value;
+
+    const desk=
+    document.getElementById("customDeskripsi").value;
+
+    const mulai=
+    document.getElementById("customMulai").value;
+
+    const selesai=
+    document.getElementById("customSelesai").value;
+
+    if(nama.trim()==""){
+
+        alert("Nama Tahapan belum diisi.");
+
+        return;
+
+    }
+
+    plannerStages.push({
+
+        checked:true,
+
+        urutan:
+        plannerStages.length+1,
+
+        nama:nama,
+
+        deskripsi:desk,
+
+        mulai:mulai,
+
+        selesai:selesai
+
+    });
+
+    document.getElementById("customNama").value="";
+
+    document.getElementById("customDeskripsi").value="";
+
+    document.getElementById("customMulai").value="";
+
+    document.getElementById("customSelesai").value="";
+
+    renderPlanner();
+
+}
+/*=====================================================
+SIMPAN TAHAPAN TERPILIH
+=====================================================*/
+
+async function simpanTahapanTerpilih(){
+
+    const themeId=
+    document.getElementById("theme").value;
+
+    if(!themeId){
+
+        alert("Pilih Tema Projek terlebih dahulu.");
+
+        return;
+
+    }
+
+    const dipilih=
+
+    plannerStages.filter(
+
+        s=>s.checked
+
+    );
+
+    if(dipilih.length==0){
+
+        alert("Belum ada tahapan yang dipilih.");
+
+        return;
+
+    }
+
+    const btn=
+
+    document.getElementById(
+
+    "btnSimpanSemua"
+
+    );
+
+    btn.disabled=true;
+
+    btn.innerHTML=
+
+    "⏳ Menyimpan...";
+
+    try{
+
+        for(const stage of dipilih){
+
+            const url=
+
+            API_URL+
+
+            "?action=saveStage"+
+
+            "&themeId="+
+            encodeURIComponent(themeId)+
+
+            "&urutan="+
+            encodeURIComponent(stage.urutan)+
+
+            "&namaTahap="+
+            encodeURIComponent(stage.nama)+
+
+            "&deskripsiTahap="+
+            encodeURIComponent(stage.deskripsi)+
+
+            "&mingguMulai="+
+            encodeURIComponent(stage.mulai)+
+
+            "&mingguSelesai="+
+            encodeURIComponent(stage.selesai);
+
+            const res=
+
+            await fetch(url);
+
+            await res.json();
+
+        }
+
+        alert(
+
+        dipilih.length+
+
+        " tahapan berhasil disimpan."
+
+        );
+
+        plannerStages=[];
+
+        renderPlanner();
+
+        await loadStages();
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert(
+
+        "Gagal menyimpan."
+
+        );
+
+    }
+
+    finally{
+
+        btn.disabled=false;
+
+        btn.innerHTML=
+
+        "💾 Simpan Semua Tahapan";
+
+    }
+
+}
+
+/*=====================================================
+EDIT TAHAPAN PLANNER
+=====================================================*/
+
+function editPlanner(index){
+
+    const s=
+
+    plannerStages[index];
+
+    document.getElementById(
+
+    "customNama"
+
+    ).value=s.nama;
+
+    document.getElementById(
+
+    "customDeskripsi"
+
+    ).value=s.deskripsi;
+
+    document.getElementById(
+
+    "customMulai"
+
+    ).value=s.mulai;
+
+    document.getElementById(
+
+    "customSelesai"
+
+    ).value=s.selesai;
+
+    plannerStages.splice(
+
+    index,
+
+    1
+
+    );
+
+    renderPlanner();
+
+}
+
+/*=====================================================
+HAPUS TAHAPAN PLANNER
+=====================================================*/
+
+function hapusPlanner(index){
+
+    if(
+
+    !confirm(
+
+    "Hapus tahapan ini?"
+
+    )
+
+    ) return;
+
+    plannerStages.splice(
+
+    index,
+
+    1
+
+    );
+
+    plannerStages.forEach(
+
+    (s,i)=>{
+
+        s.urutan=i+1;
+
+    }
+
+    );
+
+    renderPlanner();
+
+}
+
+/*=====================================================
+NAIKKAN URUTAN
+=====================================================*/
+
+function naikPlanner(index){
+
+    if(index==0) return;
+
+    [
+
+    plannerStages[index],
+
+    plannerStages[index-1]
+
+    ]=
+
+    [
+
+    plannerStages[index-1],
+
+    plannerStages[index]
+
+    ];
+
+    plannerStages.forEach(
+
+    (s,i)=>{
+
+        s.urutan=i+1;
+
+    }
+
+    );
+
+    renderPlanner();
+
+}
+
+/*=====================================================
+TURUNKAN URUTAN
+=====================================================*/
+
+function turunPlanner(index){
+
+    if(
+
+    index>=
+
+    plannerStages.length-1
+
+    ) return;
+
+    [
+
+    plannerStages[index],
+
+    plannerStages[index+1]
+
+    ]=
+
+    [
+
+    plannerStages[index+1],
+
+    plannerStages[index]
+
+    ];
+
+    plannerStages.forEach(
+
+    (s,i)=>{
+
+        s.urutan=i+1;
+
+    }
+
+    );
+
+    renderPlanner();
+
+}
+/*=====================================================
+RENDER PLANNER (VERSI FINAL)
+=====================================================*/
+
+function renderPlanner(){
+
+    const box=document.getElementById("aiStageList");
+
+    if(plannerStages.length===0){
+
+        box.innerHTML="<p>Belum ada usulan tahapan.</p>";
+
+        return;
+
+    }
+
+    let html="";
+
+    plannerStages.forEach((s,index)=>{
+
+        html+=`
+
+<div class="ai-item">
+
+<div style="display:flex;align-items:flex-start;width:100%;">
+
+<div style="margin-right:10px;">
+
+<input
+type="checkbox"
+
+${s.checked?"checked":""}
+
+onchange="plannerStages[${index}].checked=this.checked">
+
+</div>
+
+<div style="flex:1;">
+
+<b>
+
+${s.urutan}. ${escapeHtml(s.nama)}
+
+</b>
+
+<div class="ai-week">
+
+📅 Minggu
+
+${s.mulai}
+
+-
+
+${s.selesai}
+
+</div>
+
+<div style="font-size:13px;color:#666;margin-top:5px;">
+
+${escapeHtml(s.deskripsi)}
+
+</div>
+
+<div style="margin-top:10px;display:flex;gap:5px;flex-wrap:wrap;">
+
+<button onclick="naikPlanner(${index})">
+
+⬆
+
+</button>
+
+<button onclick="turunPlanner(${index})">
+
+⬇
+
+</button>
+
+<button onclick="editPlanner(${index})">
+
+✏ Edit
+
+</button>
+
+<button onclick="hapusPlanner(${index})">
+
+🗑 Hapus
+
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+    });
+
+    box.innerHTML=html;
+
+}
+
+/*=====================================================
+GET SELECTED THEME
+=====================================================*/
+
+async function getSelectedTheme(){
+
+    const themeId=
+
+    document.getElementById("theme").value;
+
+    if(!themeId) return null;
+
+    const data=
+
+    await apiGet("getThemes");
+
+    return data.find(
+
+    t=>t.ThemeID===themeId
+
+    );
+
+}
+
+/*=====================================================
+DELETE STAGE
+=====================================================*/
+
+async function hapusTahap(stageId){
+
+    if(!confirm("Yakin menghapus tahapan ini?"))
+
+    return;
+
+    try{
+
+        const result=
+
+        await fetch(
+
+        API_URL+
+
+        "?action=deleteStage"+
+
+        "&stageId="+
+
+        encodeURIComponent(stageId)
+
+        );
+
+        const json=
+
+        await result.json();
+
+        alert(json.message);
+
+        loadStages();
+
+    }
+
+    catch(err){
+
+        console.log(err);
+
+        alert("Gagal menghapus.");
+
+    }
 
 }
 
 /*=====================================================
 HELPER
-======================================================*/
+=====================================================*/
 
 function escapeHtml(text){
 
     if(!text) return "";
 
     return text
+
     .replace(/&/g,"&amp;")
+
     .replace(/</g,"&lt;")
+
     .replace(/>/g,"&gt;");
 
 }
 
 /*=====================================================
+CLEAR PLANNER
+=====================================================*/
+
+function clearPlanner(){
+
+    plannerStages=[];
+
+    renderPlanner();
+
+}
+
+/*=====================================================
+STATUS
+=====================================================*/
+
+function setStatus(text){
+
+    const el=
+
+    document.getElementById("status");
+
+    if(el){
+
+        el.innerHTML=text;
+
+    }
+
+}
+
+/*=====================================================
 VERSI
-======================================================*/
+=====================================================*/
 
 console.log(
 
-"KOLAB STAGES V2 Loaded"
+"KOLAB STAGES V3 READY"
 
 );
